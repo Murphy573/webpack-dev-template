@@ -77,3 +77,7 @@ input[type='reset'],
 textarea {
   -webkit-appearance: none;
 }
+
+.hello {
+  color: red;
+}
