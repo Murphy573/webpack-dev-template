@@ -2,9 +2,9 @@ const path = require('path');
 const resolve = dir => path.join(__dirname, dir);
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-console.log(__dirname);
+const webpack = require('webpack');
 module.exports = {
-  // mode: 'development',
+  mode: 'development',
   context: resolve(''),
   node: {
     setImmediate: false,
@@ -17,15 +17,32 @@ module.exports = {
   },
   entry: './src/main.js',
   output: {
-    filename: 'static/js/[name].[contenthash:8].js',
-    path: resolve('dist'),
-    publicPath: '/'
+    filename: 'static/js/[name].[hash:8].js',
+    path: resolve('dist')
   },
   resolve: {
     // 扩展名:配置之后引用文件可以省略
     extensions: [' ', '.js', '.jsx', '.vue', '.json', '.css']
   },
   devtool: 'eval-source-map',
+  devServer: {
+    clientLogLevel: 'warning',
+    historyApiFallback: {
+      rewrites: [
+        {
+          from: /.*/,
+          to: path.posix.join(__dirname, 'public/index.html')
+        }
+      ]
+    },
+    hot: true,
+    contentBase: './dist',
+    compress: true,
+    host: 'localhost',
+    port: 9999,
+    open: true
+    // publicPath: './dist/static/'
+  },
   module: {
     rules: [
       {
@@ -102,6 +119,8 @@ module.exports = {
       filename: 'index.html',
       template: './public/index.html',
       inject: true
-    })
+    }),
+    new webpack.NamedModulesPlugin(),
+    new webpack.HotModuleReplacementPlugin()
   ]
 };

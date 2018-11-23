@@ -1,3 +1,3 @@
 export function A() {
-  console.log('A called');
+  console.log('A called,afeter');
 }
