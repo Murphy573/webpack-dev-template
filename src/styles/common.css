@@ -80,4 +80,5 @@ textarea {
 
 .hello {
   color: red;
+  background: url('../assets/lyf.jpg') no-repeat;
 }
