@@ -22,7 +22,10 @@ module.exports = {
   },
   resolve: {
     // 扩展名:配置之后引用文件可以省略
-    extensions: [' ', '.js', '.jsx', '.vue', '.json', '.css']
+    extensions: [' ', '.js', '.jsx', '.vue', '.json', '.css'],
+    alias: {
+      '@': resolve('src')
+    }
   },
   devtool: 'eval-source-map',
   devServer: {

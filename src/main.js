@@ -1,7 +1,7 @@
 import './styles/common';
 import './assets/iconfont/iconfont';
 import LYF from './assets/lyf.jpg';
-import { A } from './scripts/temp';
+import './scripts/promise/test';
 
 function component() {
   let element = document.createElement('div');
@@ -21,5 +21,4 @@ function component() {
   return element;
 }
 
-document.body.appendChild(component());
-A();
+// document.body.appendChild(component());
