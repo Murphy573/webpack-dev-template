@@ -1,68 +1,89 @@
-const path = require('path');
+const path = require("path");
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 const resolve = dir => path.join(__dirname, dir);
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
-const webpack = require('webpack');
 module.exports = {
-  mode: 'development',
-  context: resolve(''),
+  mode: "development",
+  context: resolve(""),
   node: {
     setImmediate: false,
-    process: 'mock',
-    dgram: 'empty',
-    fs: 'empty',
-    net: 'empty',
-    tls: 'empty',
-    child_process: 'empty'
+    process: "mock",
+    dgram: "empty",
+    fs: "empty",
+    net: "empty",
+    tls: "empty",
+    child_process: "empty"
   },
-  entry: './src/main.js',
+  entry: {
+    app: ["@babel/polyfill", resolve("./src/main.js")]
+  },
   output: {
-    filename: 'static/js/[name].[hash:8].js',
-    path: resolve('dist')
+    filename: "static/js/[name].[hash:8].js",
+    path: resolve("dist")
   },
   resolve: {
     // 扩展名:配置之后引用文件可以省略
-    extensions: [' ', '.js', '.jsx', '.vue', '.json', '.css'],
+    extensions: [" ", ".js", ".jsx", ".vue", ".json", ".css"],
     alias: {
-      '@': resolve('src')
+      "@": resolve("src")
     }
   },
-  devtool: 'eval-source-map',
+  devtool: "eval-source-map",
   devServer: {
-    clientLogLevel: 'warning',
+    clientLogLevel: "warning",
     historyApiFallback: {
       rewrites: [
         {
           from: /.*/,
-          to: path.posix.join(__dirname, 'public/index.html')
+          to: path.posix.join(__dirname, "public/index.html")
         }
       ]
     },
     hot: true,
-    contentBase: './dist',
+    contentBase: "./dist",
     compress: true,
-    host: 'localhost',
+    host: "localhost",
     port: 9999,
     open: true
-    // publicPath: './dist/static/'
   },
   module: {
     rules: [
       {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        test: /\.jsx?$/,
+        loader: "babel-loader"
+      },
+      {
+        test: /\.(css|scss|sass)$/,
+        use: [
+          {
+            loader: "style-loader"
+          },
+          {
+            loader: "css-loader",
+            options: {
+              importLoaders: 1
+            }
+          },
+          {
+            loader: "sass-loader"
+          },
+          {
+            loader: "postcss-loader"
+          }
+        ]
       },
       {
         test: /\.(png|jpe?g|gif|webp)(\?.*)?$/,
         use: [
           {
-            loader: 'url-loader',
+            loader: "url-loader",
             options: {
               limit: 4096,
               fallback: {
-                loader: 'file-loader',
+                loader: "file-loader",
                 options: {
-                  name: 'static/img/[name].[hash:8].[ext]'
+                  name: "static/img/[name].[hash:8].[ext]"
                 }
               }
             }
@@ -73,13 +94,13 @@ module.exports = {
         test: /\.(mp4|webm|ogg|mp3|wav|flac|aac)(\?.*)?$/,
         use: [
           {
-            loader: 'url-loader',
+            loader: "url-loader",
             options: {
               limit: 4096,
               fallback: {
-                loader: 'file-loader',
+                loader: "file-loader",
                 options: {
-                  name: 'static/media/[name].[hash:8].[ext]'
+                  name: "static/media/[name].[hash:8].[ext]"
                 }
               }
             }
@@ -90,9 +111,9 @@ module.exports = {
         test: /\.(svg)(\?.*)?$/,
         use: [
           {
-            loader: 'file-loader',
+            loader: "file-loader",
             options: {
-              name: 'static/fonts/[name].[hash:8].[ext]'
+              name: "static/fonts/[name].[hash:8].[ext]"
             }
           }
         ]
@@ -101,13 +122,13 @@ module.exports = {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/i,
         use: [
           {
-            loader: 'url-loader',
+            loader: "url-loader",
             options: {
               limit: 4096,
               fallback: {
-                loader: 'file-loader',
+                loader: "file-loader",
                 options: {
-                  name: 'static/fonts/[name].[hash:8].[ext]'
+                  name: "static/fonts/[name].[hash:8].[ext]"
                 }
               }
             }
@@ -117,10 +138,10 @@ module.exports = {
     ]
   },
   plugins: [
-    new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(["dist"]),
     new HtmlWebpackPlugin({
-      filename: 'index.html',
-      template: './public/index.html',
+      filename: "index.html",
+      template: "./public/index.html",
       inject: true
     }),
     new webpack.NamedModulesPlugin(),
